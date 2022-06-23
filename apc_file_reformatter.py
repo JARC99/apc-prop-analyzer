@@ -58,4 +58,6 @@ for file in file_list:
         rpm_file_array[:, 7] = rpm_file_array[:, 7]*T_convfact
 
         np.savetxt(rpm_fdir, rpm_file_array[:, :8], fmt=[
-                   "%.1f", "%.2f", "%.4f", "%.4f", "%.4f", "%.3f", "%.3f", "%.3f"], header="V     J        eta_p      CT         CP         P         Q         T", delimiter=',    ')
+                   "%.1f", "%.2f", "%.4f", "%.4f", "%.4f", "%.3f", "%.3f",
+                   "%.3f"], header="V     J        eta_p      CT         CP" +
+                   "         P         Q         T", delimiter=',    ')

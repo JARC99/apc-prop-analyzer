@@ -1,0 +1,105 @@
+4.75x4.5E                         (475x45E.dat)             
+v2022-0215
+Simulation Date: 05/18/2022
+
+
+       ----- AIRFOIL SUMMARY DATA -----
+
+     DEFINITIONS:
+         THE QUOTED PITCH REFLECTS, IN GENERAL, ANGULAR MEASURE
+         AS DEFINED WITH A FLAT BOTTOM SURFACE.  THIS WILL
+         AGREE WITH A PRATHER GAGE MEASUREMENT OVER MOST OF THE
+         EFFECTIVE PORTION OF THE BLADE. (NOTE: QUOTED=INPUT)
+         THE LE-TE MEASURE IS DEFINED IN TERMS OF LEADING EDGE
+         AND TRAILING EDGE (MOLD) PARTING LINE DATUMS.
+         THE PRATHER MEASURE REFLECTS THE MOST LIKELY PITCH 
+         INTERPRETATION FROM A PITCH MEASUREMENT DEVICE.
+         THAT RESTS AGAINST THE LOWER SURFACE.
+         SWEEP IS DEFINED WITH (MOLD) LE PARTING LINE.
+         ZHIGH IS HIGHEST ELEVATION ON TOP SURFACE.
+         TWIST IS DEFINED WITH (MOLD) LE AND TE PARTING LINE DATUMS.
+         CHORD IS THE LENGTH BETWEEN (MOLD) LE AND TE PARTING LINES.
+         CGY IS MASS OFFSET, FORE-AFT.
+         CGZ IS MASS OFFSET, ELEVATION.
+         
+
+      STATION     CHORD       PITCH       PITCH        PITCH       SWEEP    THICKNESS      TWIST      MAX-THICK  CROSS-SECTION ZHIGH       CGY          CGZ                        
+       (IN)       (IN)       (QUOTED)    (LE-TE)     (PRATHER)      (IN)     RATIO         (DEG)       (IN)      (IN**2)      (IN)         (IN)         (IN)                 
+
+      0.6612      0.4950      4.5000      4.5000      4.0345      0.2332      0.1294     47.2884      0.0641      0.0275      0.2896      0.0723      0.1344
+      0.6912      0.4926      4.5000      4.5000      4.1297      0.2342      0.1279     46.0169      0.0630      0.0258      0.2861      0.0702      0.1367
+      0.7213      0.4901      4.5000      4.5000      4.2112      0.2350      0.1267     44.7975      0.0621      0.0242      0.2824      0.0682      0.1384
+      0.7513      0.4874      4.5000      4.5000      4.2797      0.2358      0.1257     43.6283      0.0613      0.0228      0.2783      0.0665      0.1395
+      0.7814      0.4847      4.5000      4.5000      4.3358      0.2365      0.1251     42.5071      0.0606      0.0216      0.2740      0.0650      0.1401
+      0.8116      0.4818      4.5000      4.5000      4.3810      0.2370      0.1246     41.4264      0.0600      0.0205      0.2694      0.0637      0.1401
+      0.8532      0.4777      4.5000      4.5000      4.4269      0.2377      0.1239     40.0100      0.0592      0.0193      0.2626      0.0622      0.1392
+      0.9104      0.4717      4.5000      4.5000      4.4612      0.2383      0.1230     38.1921      0.0580      0.0182      0.2524      0.0609      0.1364
+      0.9694      0.4651      4.5000      4.5000      4.4652      0.2385      0.1220     36.4572      0.0567      0.0174      0.2409      0.0603      0.1316
+      1.0285      0.4581      4.5000      4.5000      4.4623      0.2384      0.1210     34.8516      0.0554      0.0168      0.2285      0.0600      0.1255
+      1.0876      0.4507      4.5000      4.5000      4.4601      0.2380      0.1201     33.3656      0.0541      0.0162      0.2163      0.0599      0.1191
+      1.1467      0.4428      4.5000      4.5000      4.4585      0.2372      0.1191     31.9880      0.0527      0.0155      0.2043      0.0600      0.1126
+      1.2058      0.4346      4.5000      4.5000      4.4574      0.2360      0.1181     30.7089      0.0513      0.0148      0.1925      0.0602      0.1060
+      1.2649      0.4259      4.5000      4.5000      4.4568      0.2346      0.1171     29.5192      0.0499      0.0141      0.1810      0.0605      0.0994
+      1.3240      0.4168      4.5000      4.5000      4.4566      0.2328      0.1162     28.4108      0.0484      0.0134      0.1697      0.0609      0.0927
+      1.3831      0.4073      4.5000      4.5000      4.4569      0.2307      0.1152     27.3764      0.0469      0.0128      0.1586      0.0613      0.0860
+      1.4422      0.3974      4.5000      4.5000      4.4576      0.2282      0.1142     26.4093      0.0454      0.0121      0.1478      0.0618      0.0793
+      1.5013      0.3871      4.5000      4.5000      4.4587      0.2255      0.1133     25.5039      0.0438      0.0114      0.1372      0.0622      0.0726
+      1.5604      0.3764      4.5000      4.5000      4.4605      0.2224      0.1123     24.6547      0.0423      0.0107      0.1268      0.0625      0.0657
+      1.6195      0.3652      4.5000      4.5000      4.4633      0.2191      0.1113     23.8570      0.0407      0.0101      0.1166      0.0626      0.0585
+      1.6786      0.3537      4.5000      4.5000      4.4672      0.2154      0.1104     23.1065      0.0390      0.0096      0.1067      0.0625      0.0512
+      1.7377      0.3417      4.5000      4.5000      4.4713      0.2114      0.1094     22.3995      0.0374      0.0091      0.0970      0.0623      0.0437
+      1.7968      0.3293      4.5000      4.5000      4.4723      0.2072      0.1084     21.7324      0.0357      0.0086      0.0876      0.0620      0.0363
+      1.8559      0.3165      4.5000      4.5000      4.4705      0.2026      0.1074     21.1021      0.0340      0.0081      0.0783      0.0618      0.0291
+      1.9150      0.3033      4.5000      4.5000      4.4696      0.1978      0.1065     20.5058      0.0323      0.0076      0.0693      0.0616      0.0222
+      1.9741      0.2897      4.5000      4.5000      4.4707      0.1927      0.1055     19.9410      0.0306      0.0070      0.0606      0.0615      0.0155
+      2.0332      0.2757      4.5000      4.5000      4.4743      0.1873      0.1045     19.4052      0.0288      0.0064      0.0520      0.0615      0.0093
+      2.0923      0.2612      4.5000      4.5000      4.4806      0.1817      0.1036     18.8965      0.0271      0.0058      0.0437      0.0617      0.0035
+      2.1514      0.2464      4.5000      4.5000      4.4897      0.1758      0.1026     18.4129      0.0253      0.0052      0.0357      0.0620     -0.0018
+      2.2105      0.2311      4.5000      4.5000      4.5001      0.1696      0.1016     17.9526      0.0235      0.0046      0.0278      0.0623     -0.0068
+      2.2695      0.2100      4.5000      4.5000      4.5132      0.1580      0.1007     17.5146      0.0211      0.0038      0.0184      0.0600     -0.0126
+      2.3257      0.1582      4.5000      4.5000      4.5714      0.1168      0.0997     17.1159      0.0158      0.0021     -0.0007      0.0422     -0.0238
+      2.3750      0.0001      4.5000      4.5307      4.5302     -0.0273      0.0989     16.8889      0.0000      0.0000     -0.0526      0.0000      0.0000
+
+
+ RADIUS:  2.38    PROPELLER RADIUS (IN)
+ HUBTRA:  0.66    HUB TRANSITION (IN)
+ BLADES:  2       NUMBER OF BLADES
+
+
+       ----- INERTIA AND AREA DATA -----
+
+ TOTAL WEIGHT (LB)          =     0.007312
+ TOTAL WEIGHT (Kg)          =     0.003316
+ TOTAL VOLUME (IN**3)       =     0.119119
+ TOTAL PROJECTED AREA (IN**2) =       1.5918
+ MOMENT OF INERTIA (SNAIL-IN**2) =     0.000013
+ MOMENT OF INERTIA (Kg-M**2) =     0.000001
+ STATIC MOMENT, ONE SIDE (IN-LB) =     0.002252
+
+ SANITY CHECK DATA ARE BELOW 
+ DENSITY (SPECIFIC GRAVITY, INPUT FILE)          =    1.700    
+ DENSITY (INPUT FILE, LB/IN**3)                  =   0.6138E-01
+ AVERAGE DENSITY (FROM WT & VOL ABOVE, LB/IN**3) =   0.6138E-01
+
+ ACTIVITY FACTOR =     97.931
+ INNER LIMIT (NORMALIZED) =      0.105
+
+
+
+       ----- NATURAL FREQUENCY DATA -----
+
+ LOWEST NATURAL BENDING FREQUENCY (IN TERMS OF RPM) =     36360.15
+
+ BASED ON MODULUS (MILLION)   =    2.80
+ AND, MATERIAL DENSITY (S.G.) =     1.70
+
+
+       ----- AIRFOIL SECTIONS -----
+
+ AIRFOIL1:  1.50, E63         (Transition Start, Airfoil 1)
+ AIRFOIL2:  2.20, APC12       (Transition End, Airfoil 2)
+
+ AIRFOILS ARE SCALED BASED ON THICKNESS RATIO IN TABLE ABOVE.
+
+ NOTE: APC12 airfoil is equivalent to NACA 4412
+

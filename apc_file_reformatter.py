@@ -3,7 +3,7 @@ import numpy as np
 
 from pint import UnitRegistry
 
-APC_DATA_DIR = "apc_data/test"
+APC_DATA_DIR = "apc_data/performance"
 NEW_DATA_DIR = "performance_data"
 
 ureg = UnitRegistry()
@@ -42,22 +42,43 @@ for file in file_list:
                     if "-NaN" not in line:
                         rpm_file.write(line)
                     else:
-                        pass
+                        nan_index = line.find("-NaN")
+                        new_line = line[:nan_index] + \
+                            "     " + line[nan_index:]
+                        rpm_file.write(new_line)
             except IndexError:
                 for line in line_list[index_list[k]+4:]:
                     if "-NaN" not in line:
                         rpm_file.write(line)
                     else:
-                        pass
+                        nan_index = line.find("-NaN")
+                        new_line = line[:nan_index] + \
+                            "     " + line[nan_index:]
+                        rpm_file.write(new_line)
 
-        rpm_file_array = np.loadtxt(rpm_fdir)
+        rpm_file_array = np.genfromtxt(rpm_fdir)
 
         rpm_file_array[:, 0] = rpm_file_array[:, 0]*V_convfact
         rpm_file_array[:, 5] = rpm_file_array[:, 5]*P_convfact
         rpm_file_array[:, 6] = rpm_file_array[:, 6]*Q_convfact
         rpm_file_array[:, 7] = rpm_file_array[:, 7]*T_convfact
 
+        for l, row_array in enumerate(rpm_file_array):
+            if np.any(np.isnan(row_array)):
+
+                x = row_array[1]
+
+                x_1 = rpm_file_array[l-1, 1]
+                x_2 = rpm_file_array[l-2, 1]
+
+                y_1 =rpm_file_array[l-1, 2:]
+                y_2 =rpm_file_array[l-2, 2:]
+
+                rpm_file_array[l, 2:] = y_1 + (x - x_1) * (y_2 - y_1)/(x_2 - x_1)
+
+
+
         np.savetxt(rpm_fdir, rpm_file_array[:, :8], fmt=[
-                   "%.1f", "%.2f", "%.4f", "%.4f", "%.4f", "%.3f", "%.3f",
-                   "%.3f"], header="V     J        eta_p      CT         CP" +
-                   "         P         Q         T", delimiter=',    ')
+                    "%.1f", "%.2f", "%.4f", "%.4f", "%.4f", "%.3f", "%.3f",
+                    "%.3f"], header="V     J        eta_p      CT         CP" +
+                    "         P         Q         T", delimiter=',    ')

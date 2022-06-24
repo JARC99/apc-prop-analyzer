@@ -83,31 +83,30 @@ for file in file_list:
 
 
 # %% Create average performance files
+    rpm_file_list = os.listdir(prop_folder)
+    for m, rpm_file in enumerate(rpm_file_list):
+        data_array = np.loadtxt(os.path.join(
+            prop_folder, rpm_file), delimiter=',')
+        if m == 0:
+            J_array = data_array[:, 1]
+            eta_p_array = data_array[:, 2]
+            CT_array = data_array[:, 3]
+            CP_array = data_array[:, 4]
 
-        rpm_file_list = os.listdir(prop_folder)
-        for i, rpm_file in enumerate(rpm_file_list):
-            data_array = np.loadtxt(os.path.join(
-                prop_folder, rpm_file), delimiter=",")
-            if i == 0:
-                J_array = data_array[:, 1]
-                eta_p_array = data_array[:, 2]
-                CT_array = data_array[:, 3]
-                CP_array = data_array[:, 4]
+        else:
+            J_array = np.vstack((J_array, data_array[:, 1]))
+            eta_p_array = np.vstack((eta_p_array, data_array[:, 2]))
+            CT_array = np.vstack((CT_array, data_array[:, 3]))
+            CP_array = np.vstack((CP_array, data_array[:, 4]))
 
-            else:
-                J_array = np.vstack((J_array, data_array[:, 1]))
-                eta_p_array = np.vstack((eta_p_array, data_array[:, 2]))
-                CT_array = np.vstack((CT_array, data_array[:, 3]))
-                CP_array = np.vstack((CP_array, data_array[:, 4]))
+    J_array = np.mean(J_array, 0)
+    eta_p_array = np.mean(eta_p_array, 0)
+    CT_array = np.mean(CT_array, 0)
+    CP_array = np.mean(CP_array, 0)
 
-        J_array = np.mean(J_array, 0)
-        eta_p_array = np.mean(eta_p_array, 0)
-        CT_array = np.mean(CT_array, 0)
-        CP_array = np.mean(CP_array, 0)
+    ave_data_array = np.vstack(
+        (J_array, eta_p_array, CT_array, CP_array)).T
 
-        ave_data_array = np.vstack(
-            (J_array, eta_p_array, CT_array, CP_array)).T
-
-        np.savetxt(os.path.join(AVEPERF_DATA_DIR, prop_name + ".dat"),
-                   ave_data_array, fmt=["%.1f", "%.2f", "%.4f", "%.4f"],
-                   header="J, eta_p, CT, CP", delimiter=',')
+    np.savetxt(os.path.join(AVEPERF_DATA_DIR, prop_name + ".dat"),
+               ave_data_array, fmt=["%.2f", "%.4f", "%.4f", "%.4f"],
+               header="J, eta_p, CT, CP", delimiter=',')

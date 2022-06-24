@@ -12,8 +12,9 @@ ureg = UnitRegistry()
 # Plotting constants
 DPI = 300
 SUBSTACK_FLAG = True
+FACECOLOR ="#f2f2e3"
 COLORS = ["darkblue", "darkorange", "darkgreen", "firebrick",
-          "purple", "mediumvioletred", "goldenrod", "dimgrey", "darkcyan"]
+          "purple", "mediumvioletred", "goldenrod", "darkcyan"]
 GRAPHICS_DIR = "graphics"
 
 if SUBSTACK_FLAG:
@@ -30,7 +31,7 @@ AVEPERF_DATA_DIR = "reformatted_data/ave_performance"
 # %% User input
 
 # Declare operation conditions
-V_op = 0.0001
+V_op = 15
 n_op = 8000/60
 P_op = 1000
 rho_op = 1.02114
@@ -68,20 +69,18 @@ for k, prop in enumerate(prop_list):
 for ax in axes:
     if SUBSTACK_FLAG:
         for spine in ax.spines.values():
-            spine.set(color="black", alpha=1/2)
-        ax.grid(visible=True, color="black", alpha=1/2)
+            spine.set(color="gray")
+        ax.grid(visible=True, color="gray")
+        ax1.legend(title="Pitch, in", facecolor=FACECOLOR, fancybox=False, edgecolor="gray")
     else:
-        pass
+        ax1.legendtitle="Pitch, in"()
     ax.set_xlim(left=0)
     ax.set_ylim(bottom=0)
     ax.axvline(x=CS_op, color="black", linestyle="dotted")
-ax1.legend()
+
 ax1.set_ylabel(r'$\mathdefault{\eta_{p}}$')
 ax2.set_xlabel(r'$\mathdefault{C_{S}}$')
 ax2.set_ylabel('J')
-
-fig.savefig(GRAPHICS_DIR + "/plot.png",
-            format="png", transparent=True, bbox_inches="tight")
 
 eta_p_list = []
 for i, eta_p_func in enumerate(eta_p_func_list):
@@ -91,10 +90,12 @@ for i, eta_p_func in enumerate(eta_p_func_list):
 eta_p_best = max(eta_p_list)
 best_index = eta_p_list.index(eta_p_best)
 ax1.axhline(y=eta_p_best, color="black", linestyle="dotted")
+ax1.plot(CS_op, eta_p_best, marker='x', color="black")
 
 pitch_best = prop_list[best_index][3:-1]
 J_best = J_func_list[best_index](CS_op)
 ax2.axhline(y=J_best, color="black", linestyle="dotted")
+ax2.plot(CS_op, J_best, marker='x', color="black")
 
 D_convfact = (1 * ureg.meter).to(ureg.inch).magnitude
 D = V_op/(n_op*J_best) * D_convfact
@@ -103,6 +104,9 @@ T = eta_p_best*P_op/V_op
 
 
 # %% Output
+
+fig.savefig(GRAPHICS_DIR + "/plot.png",
+            format="png", transparent=True, bbox_inches="tight")
 
 print("Diameter: {0:.1f} in\nPitch: {1} in\nPropulsive Efficiency: {2:.4f}\nThrust: {3:.4f} N".format(
     D, pitch_best, eta_p_best, T))

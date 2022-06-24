@@ -12,7 +12,7 @@ import os
 DPI = 300
 SUBSTACK_FLAG = True
 COLORS = ["darkblue", "darkorange", "darkgreen", "firebrick",
-          "purple", "mediumvioletred", "dimgrey", "darkcyan"]
+          "purple", "mediumvioletred", "goldenrod", "dimgrey", "darkcyan"]
 GRAPHICS_DIR = "graphics"
 
 if SUBSTACK_FLAG:
@@ -22,7 +22,7 @@ else:
     sns.set_theme(style="whitegrid", font="Palatino Linotype",
           context="paper", palette=COLORS)
 
-prop_list = ["15x4E", "15x6E", "15x7E", "15x8E", "15x10E"]
+prop_list = ["15x4E", "15x6E", "15x7E", "15x8E", "15x10E", "16x6E", "16x8E", "16x10E", "16x12E"]
 
 
 fig, axes = plt.subplots(2, sharex=True, dpi=DPI)

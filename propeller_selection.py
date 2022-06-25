@@ -7,12 +7,12 @@ import os
 
 from scipy import interpolate
 from pint import UnitRegistry
-ureg = UnitRegistry()
+from tabulate import tabulate
 
 # Plotting constants
 DPI = 300
 SUBSTACK_FLAG = True
-FACECOLOR ="#f2f2e3"
+FACECOLOR = "#f2f2e3"
 COLORS = ["darkblue", "darkorange", "darkgreen", "firebrick",
           "purple", "mediumvioletred", "goldenrod", "darkcyan"]
 GRAPHICS_DIR = "graphics"
@@ -50,6 +50,8 @@ ax2 = axes[1]
 
 J_func_list = []
 eta_p_func_list = []
+CT_func_list = []
+CP_func_list = []
 for k, prop in enumerate(prop_list):
 
     data_file = os.path.join(AVEPERF_DATA_DIR, prop + ".dat")
@@ -64,6 +66,12 @@ for k, prop in enumerate(prop_list):
     eta_p_from_CS = interpolate.interp1d(CS_array, eta_p_array)
     eta_p_func_list.append(eta_p_from_CS)
 
+    CT_from_CS = interpolate.interp1d(CS_array, CT_array)
+    CT_func_list.append(CT_from_CS)
+
+    CP_from_CS = interpolate.interp1d(CS_array, CP_array)
+    CP_func_list.append(CP_from_CS)
+
     ax1.plot(CS_array, eta_p_array, label=prop[3:-1])
     ax2.plot(CS_array, J_array)
 for ax in axes:
@@ -71,9 +79,10 @@ for ax in axes:
         for spine in ax.spines.values():
             spine.set(color="gray")
         ax.grid(visible=True, color="gray")
-        ax1.legend(title="Pitch, in", facecolor=FACECOLOR, fancybox=False, edgecolor="gray")
+        ax1.legend(title="Pitch, in", facecolor=FACECOLOR, fancybox=False,
+                   edgecolor="gray")
     else:
-        ax1.legendtitle="Pitch, in"()
+        ax1.legend(title="Pitch, in")
     ax.set_xlim(left=0)
     ax.set_ylim(bottom=0)
     ax.axvline(x=CS_op, color="black", linestyle="dotted")
@@ -97,10 +106,16 @@ J_best = J_func_list[best_index](CS_op)
 ax2.axhline(y=J_best, color="black", linestyle="dotted")
 ax2.plot(CS_op, J_best, marker='x', color="black")
 
+ureg = UnitRegistry()
 D_convfact = (1 * ureg.meter).to(ureg.inch).magnitude
-D = V_op/(n_op*J_best) * D_convfact
+D_best = V_op/(n_op*J_best)
+D_in = round(D_best * D_convfact, 2)
 
-T = eta_p_best*P_op/V_op
+CT_best = CT_func_list[best_index](CS_op)
+T_best = round(CT_best*rho_op*n_op**2*D_best**4, 3)
+
+CP_best = CP_func_list[best_index](CS_op)
+P_best = round(CP_best*rho_op*n_op**3*D_best**5, 3)
 
 
 # %% Output
@@ -108,5 +123,8 @@ T = eta_p_best*P_op/V_op
 fig.savefig(GRAPHICS_DIR + "/plot.png",
             format="png", transparent=True, bbox_inches="tight")
 
-print("Diameter: {0:.1f} in\nPitch: {1} in\nPropulsive Efficiency: {2:.4f}\nThrust: {3:.4f} N".format(
-    D, pitch_best, eta_p_best, T))
+table = tabulate([[D_in, pitch_best, round(eta_p_best*100, 2), T_best,
+                   P_best]], headers=["Diameter, in", "Pitch, in",
+                                      "Propulsive Efficiency, %", "Thrust, N",
+                                      "Power, W"], tablefmt="pretty")
+print(table)

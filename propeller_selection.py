@@ -33,9 +33,8 @@ AVEPERF_DATA_DIR = "reformatted_data/ave_performance"
 # %% User input
 
 # Declare operation conditions
-manouver_list = ["T-O", "Climb", "Cruise"]
-V_op_list = [11/np.sqrt(2), 15, 25]
-
+manouver_list = ["Cruise"]
+V_op_list = [17]
 n_op = 8000/60
 P_op = 1000
 rho_op = 1.02114
@@ -46,7 +45,7 @@ prop_list = ["17x6E", "17x7E", "17x8E", "17x10E", "17x12E"]
 
 # %% Computations and plotting
 
-fig, axes = plt.subplots(2, sharex=True, dpi=DPI)
+fig, axes = plt.subplots(2, sharex=True, dpi=DPI, facecolor=FACECOLOR)
 ax1 = axes[0]
 ax2 = axes[1]
 ax1.set_ylabel(r'$\mathdefault{\eta_{p}}$')
@@ -123,6 +122,7 @@ for i, V_op in enumerate(V_op_list):
         for ax in axes:
             for spine in ax.spines.values():
                 spine.set(color="gray")
+            ax.set_facecolor(FACECOLOR)
             ax.grid(visible=True, color="gray")
         ax1.legend(title="Pitch, in", facecolor=FACECOLOR, fancybox=False,
                    edgecolor="gray", loc="upper right",
@@ -135,8 +135,8 @@ for i, V_op in enumerate(V_op_list):
                    fontsize=LEGEND_FONTSIZE, title_fontsize=LEGEND_FONTSIZE)
         ax2.legend(title="Manouver", loc="upper right",
                    fontsize=LEGEND_FONTSIZE, title_fontsize=LEGEND_FONTSIZE)
-        ax.set_xlim(left=0)
-        ax.set_ylim(bottom=0)
+    ax.set_xlim(left=0)
+    ax.set_ylim(bottom=0)
 
     for ax in axes:
         ax.axvline(x=CS_op, color="black", linestyle="dotted")
@@ -145,7 +145,7 @@ for i, V_op in enumerate(V_op_list):
 # %% Output
 
 fig.savefig(GRAPHICS_DIR + "/plot.png",
-            format="png", transparent=True, bbox_inches="tight")
+            format="png", bbox_inches="tight")
 
 table = tabulate(prop_best_list,
                  headers=["Manouver", "Diameter, in", "Pitch, in",

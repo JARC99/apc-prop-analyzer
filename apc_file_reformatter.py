@@ -7,7 +7,8 @@ APC_DATA_DIR = "apc_data/performance"
 PERF_DATA_DIR = "reformatted_data/performance"
 AVEPERF_DATA_DIR = "reformatted_data/ave_performance"
 
-# Calculate unit conversion factors.
+# %% Calculate unit conversion factors.
+
 ureg = UnitRegistry()
 V_convfact = (1 * ureg.mile_per_hour).to(ureg.meter_per_second).magnitude
 P_convfact = (1 * ureg.horsepower).to(ureg.watt).magnitude
@@ -15,15 +16,74 @@ Q_convfact = (1 * ureg.force_pound *
               ureg.inch).to(ureg.newton * ureg.meter).magnitude
 T_convfact = (1 * ureg.force_pound).to(ureg.newton).magnitude
 
-# Parse and reformat APC performance data files
+
+# %% Parse and reformat APC performance data files
+
 file_list = os.listdir(APC_DATA_DIR)
 for file in file_list:
 
+    # Create uniform naming stiyle D(diameter)P(pitch)B(blade number)T(type)
     prop_name = file[5:-4]
-    prop_folder = os.path.join(PERF_DATA_DIR, prop_name)
+    x_index = prop_name.index('x')
+
+    diam = int(prop_name[:x_index])
+    if 28 < diam <= 280:
+        diam = diam/10
+    elif 280 <= diam < 2800:
+        diam = diam/100
+    elif 2800 <= diam:
+        diam = diam/1000
+    else:
+        pass
+    diam_string = str(diam).replace('.', '-')
+
+    if '(' in prop_name:
+        parenth_index = prop_name.index('(')
+    else:
+        parenth_index = None
+
+    nsuffix = prop_name[x_index+1:parenth_index]
+
+    pitch_string = ""
+    type_str = ""
+    for m, char in enumerate(nsuffix):
+        if char.isdigit():
+            pitch_string += char
+        else:
+            type_str = nsuffix[m:]
+            break
+
+    pitch = int(pitch_string)
+    if 22.5 < pitch <= 225:
+        pitch = pitch/10
+    elif 225 < pitch <= 2250:
+        pitch = pitch/100
+    elif 2250 < pitch:
+        pitch = pitch/1000
+    else:
+        pass
+    pitch_string = str(pitch).replace('.', '-')
+
+    if '-' in type_str:
+        hyphen_index = type_str.index('-')
+
+        if type_str[hyphen_index+1:].isdigit():
+            nblades = int(type_str[hyphen_index+1:])
+        else:
+            nblades = 2
+        type_str = type_str[:hyphen_index]
+    else:
+        nblades = 2
+
+
+    prop_folder_name = "D{0}P{1}B{2}T{3}".format(
+        diam_string, pitch_string, nblades, type_str)
+    prop_folder = os.path.join(PERF_DATA_DIR, prop_folder_name)
+
     if not os.path.exists(prop_folder):
         os.makedirs(prop_folder)
 
+    # Parse the APC propeller performance files
     with open(os.path.join(APC_DATA_DIR, file)) as apc_perf_file:
         line_list = apc_perf_file.readlines()
 
@@ -107,6 +167,6 @@ for file in file_list:
     ave_data_array = np.vstack(
         (J_array, eta_p_array, CT_array, CP_array)).T
 
-    np.savetxt(os.path.join(AVEPERF_DATA_DIR, prop_name + ".dat"),
+    np.savetxt(os.path.join(AVEPERF_DATA_DIR, prop_folder_name + ".dat"),
                ave_data_array, fmt=["%.2f", "%.4f", "%.4f", "%.4f"],
                header="J, eta_p, CT, CP", delimiter=',')

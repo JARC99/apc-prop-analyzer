@@ -33,15 +33,17 @@ AVEPERF_DATA_DIR = "reformatted_data/ave_performance"
 # %% User input
 
 # Declare operation conditions
-manouver_list = ["Cruise"]
-V_op_list = [17]
+manouver_list = ["T-O", "Climb", "Cruise"]
+V_op_list = [8, 12, 17]
 n_op = 8000/60
 P_op = 1000
 rho_op = 1.02114
 
 # Declare the propeller family
-prop_list = ["17x6E", "17x7E", "17x8E", "17x10E", "17x12E"]
-
+diameter = 16
+pitch_array = np.array([4, 6, 7, 8, 10, 12])
+nblades = 2
+prop_type = "E"
 
 # %% Computations and plotting
 
@@ -52,38 +54,37 @@ ax1.set_ylabel(r'$\mathdefault{\eta_{p}}$')
 ax2.set_xlabel(r'$\mathdefault{C_{S}}$')
 ax2.set_ylabel('J')
 
-prop_best_list = []
+J_func_list = []
+eta_p_func_list = []
+CT_func_list = []
+CP_func_list = []
+for k, pitch in enumerate(pitch_array):
+    prop_name = "D{0}P{1}B{2}T{3}".format(
+        diameter, pitch, nblades, prop_type)
+    data_file = os.path.join(AVEPERF_DATA_DIR, prop_name + ".dat")
 
+    J_array, eta_p_array, CT_array, CP_array = np.loadtxt(
+        data_file, delimiter=',', unpack=True)
+    CS_array = (J_array**5/CP_array)**(1/5)
+
+    J_from_CS = interpolate.interp1d(CS_array, J_array)
+    J_func_list.append(J_from_CS)
+
+    eta_p_from_CS = interpolate.interp1d(CS_array, eta_p_array)
+    eta_p_func_list.append(eta_p_from_CS)
+
+    CT_from_CS = interpolate.interp1d(CS_array, CT_array)
+    CT_func_list.append(CT_from_CS)
+
+    CP_from_CS = interpolate.interp1d(CS_array, CP_array)
+    CP_func_list.append(CP_from_CS)
+
+    ax1.plot(CS_array, eta_p_array, label=prop_name[3:])
+    ax2.plot(CS_array, J_array)
+
+prop_best_list = []
 for i, V_op in enumerate(V_op_list):
     CS_op = V_op*(rho_op/(P_op*n_op**2))**(1/5)
-
-    J_func_list = []
-    eta_p_func_list = []
-    CT_func_list = []
-    CP_func_list = []
-    for k, prop in enumerate(prop_list):
-
-        data_file = os.path.join(AVEPERF_DATA_DIR, prop + ".dat")
-
-        J_array, eta_p_array, CT_array, CP_array = np.loadtxt(
-            data_file, delimiter=',', unpack=True)
-        CS_array = (J_array**5/CP_array)**(1/5)
-
-        J_from_CS = interpolate.interp1d(CS_array, J_array)
-        J_func_list.append(J_from_CS)
-
-        eta_p_from_CS = interpolate.interp1d(CS_array, eta_p_array)
-        eta_p_func_list.append(eta_p_from_CS)
-
-        CT_from_CS = interpolate.interp1d(CS_array, CT_array)
-        CT_func_list.append(CT_from_CS)
-
-        CP_from_CS = interpolate.interp1d(CS_array, CP_array)
-        CP_func_list.append(CP_from_CS)
-
-        if i == 0:
-            ax1.plot(CS_array, eta_p_array, label=prop[3:-1])
-            ax2.plot(CS_array, J_array)
 
     eta_p_list = []
     for m, eta_p_func in enumerate(eta_p_func_list):
@@ -93,13 +94,13 @@ for i, V_op in enumerate(V_op_list):
     eta_p_best = max(eta_p_list)
     best_index = eta_p_list.index(eta_p_best)
 
-    pitch_best = prop_list[best_index][3:-1]
+    pitch_best = pitch_array[best_index]
     J_best = J_func_list[best_index](CS_op)
 
     ureg = UnitRegistry()
     D_convfact = (1 * ureg.meter).to(ureg.inch).magnitude
     D_best = V_op/(n_op*J_best)
-    D_in = round(D_best * D_convfact, 2)
+    D_in = round(D_best * D_convfact, 1)
 
     CT_best = CT_func_list[best_index](CS_op)
     T_best = round(CT_best*rho_op*n_op**2*D_best**4, 3)
@@ -111,6 +112,9 @@ for i, V_op in enumerate(V_op_list):
                  T_best, P_best]
     prop_best_list.append(prop_best)
 
+
+# %% Output
+
     ax1.axhline(y=eta_p_best, color="black", linestyle="dotted")
     ax1.plot(CS_op, eta_p_best, marker=MARKERS[i], color="black")
 
@@ -118,31 +122,28 @@ for i, V_op in enumerate(V_op_list):
     ax2.plot(CS_op, J_best, linestyle="",
              marker=MARKERS[i], color="black", label=manouver_list[i])
 
-    if SUBSTACK_FLAG:
-        for ax in axes:
-            for spine in ax.spines.values():
-                spine.set(color="gray")
-            ax.set_facecolor(FACECOLOR)
-            ax.grid(visible=True, color="gray")
-        ax1.legend(title="Pitch, in", facecolor=FACECOLOR, fancybox=False,
-                   edgecolor="gray", loc="upper right",
-                   fontsize=LEGEND_FONTSIZE, title_fontsize=LEGEND_FONTSIZE)
-        ax2.legend(title="Manouver", facecolor=FACECOLOR,
-                   fancybox=False, edgecolor="gray", loc="upper right",
-                   fontsize=LEGEND_FONTSIZE, title_fontsize=LEGEND_FONTSIZE)
-    else:
-        ax1.legend(title="Pitch, in", loc="upper right",
-                   fontsize=LEGEND_FONTSIZE, title_fontsize=LEGEND_FONTSIZE)
-        ax2.legend(title="Manouver", loc="upper right",
-                   fontsize=LEGEND_FONTSIZE, title_fontsize=LEGEND_FONTSIZE)
+if SUBSTACK_FLAG:
+    for ax in axes:
+        for spine in ax.spines.values():
+            spine.set(color="gray")
+        ax.set_facecolor(FACECOLOR)
+        ax.grid(visible=True, color="gray")
+    ax1.legend(title="Pitch, in", facecolor=FACECOLOR, fancybox=False,
+               edgecolor="gray", loc="upper right",
+               fontsize=LEGEND_FONTSIZE, title_fontsize=LEGEND_FONTSIZE)
+    ax2.legend(title="Manouver", facecolor=FACECOLOR,
+               fancybox=False, edgecolor="gray", loc="upper right",
+               fontsize=LEGEND_FONTSIZE, title_fontsize=LEGEND_FONTSIZE)
+else:
+    ax1.legend(title="Pitch, in", loc="upper right",
+               fontsize=LEGEND_FONTSIZE, title_fontsize=LEGEND_FONTSIZE)
+    ax2.legend(title="Manouver", loc="upper right",
+               fontsize=LEGEND_FONTSIZE, title_fontsize=LEGEND_FONTSIZE)
+
+for ax in axes:
+    ax.axvline(x=CS_op, color="black", linestyle="dotted")
     ax.set_xlim(left=0)
     ax.set_ylim(bottom=0)
-
-    for ax in axes:
-        ax.axvline(x=CS_op, color="black", linestyle="dotted")
-
-
-# %% Output
 
 fig.savefig(GRAPHICS_DIR + "/plot.png",
             format="png", bbox_inches="tight")

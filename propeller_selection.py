@@ -1,4 +1,5 @@
 """Plot the propeller selection diagrams."""
+
 # %% Preamble
 import seaborn as sns
 import matplotlib.pylab as plt
@@ -11,20 +12,15 @@ from tabulate import tabulate
 
 # Plotting parameters
 DPI = 300
-SUBSTACK_FLAG = True
-FACECOLOR = "#f2f2e3"
-COLORS = ["darkblue", "darkorange", "darkgreen", "firebrick",
-          "purple", "mediumvioletred", "goldenrod", "darkcyan"]
+
+PALETTE = ["darkblue", "firebrick", "forestgreen", "darkorange",
+          "darkcyan","rebeccapurple", "mediumvioletred"]
 MARKERS = ['o', '^', 's', 'P', 'd']
 LEGEND_FONTSIZE = "small"
-GRAPHICS_DIR = "graphics"
+GRAPHICS_DIR = "output"
 
-if SUBSTACK_FLAG:
-    sns.set_theme(style="whitegrid", font="monospace",
-                  context="paper", palette=COLORS)
-else:
-    sns.set_theme(style="whitegrid", font="Palatino Linotype",
-                  context="paper", palette=COLORS)
+sns.set_theme(style="whitegrid", font="Palatino Linotype",
+              context="paper", palette=PALETTE)
 
 # Data directory
 AVEPERF_DATA_DIR = "reformatted_data/ave_performance"
@@ -47,7 +43,7 @@ prop_type = "E"
 
 # %% Computations and plotting
 
-fig, axes = plt.subplots(2, sharex=True, dpi=DPI, facecolor=FACECOLOR)
+fig, axes = plt.subplots(2, sharex=True, dpi=DPI)
 ax1 = axes[0]
 ax2 = axes[1]
 ax1.set_ylabel(r'$\mathdefault{\eta_{p}}$')
@@ -122,23 +118,11 @@ for i, V_op in enumerate(V_op_list):
     ax2.plot(CS_op, J_best, linestyle="",
              marker=MARKERS[i], color="black", label=manouver_list[i])
 
-if SUBSTACK_FLAG:
-    for ax in axes:
-        for spine in ax.spines.values():
-            spine.set(color="gray")
-        ax.set_facecolor(FACECOLOR)
-        ax.grid(visible=True, color="gray")
-    ax1.legend(title="Pitch, in", facecolor=FACECOLOR, fancybox=False,
-               edgecolor="gray", loc="upper right",
-               fontsize=LEGEND_FONTSIZE, title_fontsize=LEGEND_FONTSIZE)
-    ax2.legend(title="Manouver", facecolor=FACECOLOR,
-               fancybox=False, edgecolor="gray", loc="upper right",
-               fontsize=LEGEND_FONTSIZE, title_fontsize=LEGEND_FONTSIZE)
-else:
-    ax1.legend(title="Pitch, in", loc="upper right",
-               fontsize=LEGEND_FONTSIZE, title_fontsize=LEGEND_FONTSIZE)
-    ax2.legend(title="Manouver", loc="upper right",
-               fontsize=LEGEND_FONTSIZE, title_fontsize=LEGEND_FONTSIZE)
+
+ax1.legend(title="Pitch, in", loc="upper right",
+            title_fontsize=LEGEND_FONTSIZE)
+ax2.legend(title="Manouver", loc="upper right",
+            title_fontsize=LEGEND_FONTSIZE)
 
 for ax in axes:
     ax.axvline(x=CS_op, color="black", linestyle="dotted")

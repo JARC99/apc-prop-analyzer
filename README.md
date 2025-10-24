@@ -6,3 +6,6 @@ This script is used to process the original propeller data into a more usable fo
 
 ## propeller_selection.py
 From a given set of options, peforms a performance-based analysis to aid in the selection of a fixed pitch propeller.
+
+## convperf_plots.py
+Plots the performance curves for a selection of propellers.

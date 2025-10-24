@@ -1,4 +1,5 @@
 """Reformat the propeller performance files from APC Propellers."""
+
 import os
 import numpy as np
 from pint import UnitRegistry
@@ -6,6 +7,7 @@ from pint import UnitRegistry
 APC_DATA_DIR = "apc_data/performance"
 PERF_DATA_DIR = "reformatted_data/performance"
 AVEPERF_DATA_DIR = "reformatted_data/ave_performance"
+
 
 # %% Calculate unit conversion factors.
 
@@ -22,7 +24,7 @@ T_convfact = (1 * ureg.force_pound).to(ureg.newton).magnitude
 file_list = os.listdir(APC_DATA_DIR)
 for file in file_list:
 
-    # Create uniform naming stiyle D(diameter)P(pitch)B(blade number)T(type)
+    # Create uniform naming style D(diameter)P(pitch)B(blade number)T(type)
     prop_name = file[5:-4]
     x_index = prop_name.index('x')
 
@@ -74,7 +76,6 @@ for file in file_list:
         type_str = type_str[:hyphen_index]
     else:
         nblades = 2
-
 
     prop_folder_name = "D{0}P{1}B{2}T{3}".format(
         diam_string, pitch_string, nblades, type_str)
@@ -143,6 +144,7 @@ for file in file_list:
 
 
 # %% Create average performance files
+
     rpm_file_list = os.listdir(prop_folder)
     for m, rpm_file in enumerate(rpm_file_list):
         data_array = np.loadtxt(os.path.join(
